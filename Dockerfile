@@ -8,4 +8,14 @@ RUN export DEBIAN_FRONTEND=noninteractive; \
         varnish && \
     apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-CMD /usr/sbin/varnishd -F -f /etc/varnish-custom/default.vcl
+# Use something this in your sub-image:
+
+#RUN date +'%s' > /etc/varnish/secret
+#CMD /usr/sbin/varnishd \
+#  -F \
+#  -S /etc/varnish/secret \
+#  -T localhost:6082 \
+#  -a 0.0.0.0:8484 \
+#  -f /etc/varnish/default.vcl \
+#  -f /etc/varnish/default.vcl \
+#  -s malloc,256m && \
