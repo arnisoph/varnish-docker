@@ -1,6 +1,11 @@
-FROM alpine:3.3
+FROM debian:jessie
 MAINTAINER Arnold Bechtoldt <mail@arnoldbechtoldt.com>
 
-RUN apk add --update varnish && rm -rf /var/cache/apk/*
+RUN export DEBIAN_FRONTEND=noninteractive; \
+    apt-get update -qq && \
+    apt-get upgrade -yV -o DPkg::Options::=--force-confold && \
+    apt-get install -yV -o DPkg::Options::=--force-confold \
+        varnish && \
+    apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-CMD /usr/sbin/varnishd -f /etc/varnish-custom/default.vcl
+CMD /usr/sbin/varnishd -F -f /etc/varnish-custom/default.vcl
